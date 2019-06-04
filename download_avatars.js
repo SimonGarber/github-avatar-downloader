@@ -9,8 +9,6 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
-
-
   var options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
@@ -26,10 +24,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
   request.get(options, function(err, res, body) {
     cb(err, body);
   });
-
-
-
-
 }
 
 function downloadImgUrl(url,filepath){
@@ -40,12 +34,18 @@ function downloadImgUrl(url,filepath){
 
 function print_avatars(err,body){
   var print_URL = JSON.parse(body);
+
   for(var URL of print_URL){
     downloadImgUrl(URL.avatar_url,URL.login);
 
   }
 }
+// The third and fourth index position in process.argv is being passed
+// as the repoName and repoOwner from the node command line.
 
-getRepoContributors("jquery", "jquery", print_avatars);
-
+if(process.argv[3] !== undefined){
+getRepoContributors(process.argv[2], process.argv[3], print_avatars)
+} else {
+  console.log("Houston, we have a problem!");
+}
 
