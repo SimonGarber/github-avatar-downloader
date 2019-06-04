@@ -4,20 +4,17 @@ var token_ID = require("./secrets")
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
-// var GITHUB_TOKEN = token_ID.GITHUB_TOKEN;
 
 function getRepoContributors(repoOwner, repoName, cb) {
 
-  // var url = "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors";
 
-  // request.get(url, function(err, res, body) {
-  //   cb(err, body);
-  // });
 
   var options = {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': 'request',
+      // created a variable that hides the actual token in token_ID as a property of GITHUB_Token in the
+      // secrets.js file
       'Authorization': token_ID.GITHUB_TOKEN
     }
   };
@@ -29,20 +26,13 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
+function print_avatars(err,body){
+  var print_URL = JSON.parse(body);
+  for(var URL of print_URL){
+    console.log(URL.avatar_url);
+  }
+}
+
+getRepoContributors("jquery", "jquery", print_avatars);
 
 
-getRepoContributors("jquery", "jquery", function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
-});
-
-// request.get('http://github.com').on('response', (response) => {
-//   var data = '';
-//   response.on('data', (d) => {
-//     data += d;
-//   });
-
-//   response.on('end', () => {
-//     console.log(data);
-//   });
-// });
